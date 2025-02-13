@@ -1,8 +1,26 @@
 from mako.template import Template
 from mako.lookup import TemplateLookup
-from docutils.writers.html5_polyglot import Writer, HTMLTranslator
+from docutils.writers.html4css1 import Writer, HTMLTranslator
 from pathlib import Path
 from docutils.core import publish_parts
+from docutils import nodes
+from docutils.transforms import Transform
+
+class MoveFootnotesToEnd(Transform):
+    default_priority = 850
+
+    def apply(self):
+        footnotes = []
+        for node in self.document.traverse(nodes.footnote):
+            footnotes.append(node)
+            node.parent.remove(node)
+
+        if footnotes:
+            # Create section with 'footnotes' class
+            footnote_section = nodes.section(classes=['footnotes'])
+            self.document += footnote_section
+            for footnote in footnotes:
+                footnote_section += footnote
 
 class HayaHTMLTranslator(HTMLTranslator):
     def __init__(self, document):
@@ -32,10 +50,19 @@ class HayaHTMLTranslator(HTMLTranslator):
                               + self.body_suffix[:-1])
         assert not self.context, f'len(context) = {len(self.context)}'
 
+    def visit_admonition(self, node) -> None:
+        self.body.append(self.starttag(node, 'div', classes=['admonition']))
+
+    def depart_admonition(self, node=None) -> None:
+        self.body.append('</div>\n')
+
 class HayaHTMLWriter(Writer):
     def __init__(self):
         super().__init__()
         self.translator_class = HayaHTMLTranslator
+
+    def get_transforms(self):
+            return super().get_transforms() + [MoveFootnotesToEnd]
 
     def translate(self):
         """Override to store metadata into the `parts` dictionary."""
@@ -65,7 +92,7 @@ class PageWriter:
         with input_file.open() as file:
             source = file.read()
 
-        parts = publish_parts(source, writer=HayaHTMLWriter())
+        parts = publish_parts(source, writer=HayaHTMLWriter(), settings_overrides={'footnote_references': 'superscript'})
         html_body = parts['html_body']
 
         mytemplate = Template(html_body, lookup=self.lookup)
