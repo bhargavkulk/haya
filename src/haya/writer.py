@@ -74,18 +74,21 @@ class PageWriter:
     output_dir: Path
     lookup: TemplateLookup
     file_name: str
+    metadata: dict
 
     def __init__(self, input_dir: str,
                  output_dir: str,
                  template_dir: str,
-                 file_name: str):
+                 file_name: str,
+                 metadata: dict = dict()):
         self.input_dir = Path(input_dir)
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.lookup = TemplateLookup(directories=[template_dir])
         self.file_name = file_name
+        self.metadata = metadata
 
-    def write_page(self):
+    def write_page(self) -> dict:
         input_file = self.input_dir / Path(f'{self.file_name}.rst')
         output_file = self.output_dir / Path(f'{self.file_name}.html')
 
@@ -94,8 +97,11 @@ class PageWriter:
 
         parts = publish_parts(source, writer=HayaHTMLWriter(), settings_overrides={'footnote_references': 'superscript', 'math_output': 'mathml'})
         html_body = parts['html_body']
+        metadata = parts['metadata']
 
         mytemplate = Template(html_body, lookup=self.lookup)
 
         with output_file.open('w') as file:
-            file.write(mytemplate.render())
+            file.write(mytemplate.render(**self.metadata, **metadata))
+
+        return metadata
