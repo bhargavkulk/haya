@@ -35,4 +35,4 @@ Future Features
 The Name
 ========
 
-``haya`` comes from the Sanskrit word ``Hayagriva`` (हयगीवा) which is the name of the horse-headed incarnation of the Hindu God Vishnu. Hayagriva is considered as a god of wisdom and **knowledge**, which seems related to websites.
+``haya`` comes from the Sanskrit word ``Hayagriva`` (हयग्रीवा) which is the name of the horse-headed incarnation of the Hindu God Vishnu. Hayagriva is considered as a god of wisdom and **knowledge**, which seems related to websites.
