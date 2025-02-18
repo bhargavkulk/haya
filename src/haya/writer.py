@@ -92,7 +92,7 @@ class PageWriter:
         with input_file.open() as file:
             source = file.read()
 
-        parts = publish_parts(source, writer=HayaHTMLWriter(), settings_overrides={'footnote_references': 'superscript'})
+        parts = publish_parts(source, writer=HayaHTMLWriter(), settings_overrides={'footnote_references': 'superscript', 'math_output': 'mathml'})
         html_body = parts['html_body']
 
         mytemplate = Template(html_body, lookup=self.lookup)
