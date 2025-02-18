@@ -31,3 +31,8 @@ Future Features
 - Footnotes
 - Bibliography generation through ``BibTex`` files
 - Config file to change how ``haya`` works.
+
+The Name
+========
+
+``haya`` comes from the Sanskrit word ``Hayagriva`` (हयगीवा) which is the name of the horse-headed incarnation of the Hindu God Vishnu. Hayagriva is considered as a god of wisdom and **knowledge**, which seems related to websites.
