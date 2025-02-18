@@ -2,13 +2,22 @@
  Haya
 ======
 
-``haya`` is a static-site-generator written in python. It is powered by ``docutils`` to parse ReStructuredText which ``haya`` uses as its markup language. ``haya`` also supports templating through the ``mako`` templatig engine which allows embedding arbitrary Python code in the template.
+``haya`` is a static-site-generator written in Python. It is powered by ``docutils`` to parse ReStructuredText which ``haya`` uses as its markup language. ``haya`` also supports templating through the ``mako`` template engine which allows embedding arbitrary Python code.
 
-``haya`` expect all ``.rst`` files in a folder called ``content``, ``.css`` files in a folder called ``css`` and ``.scss`` files in a folder called ``scss``. You can run ``haya`` by calling::
+``haya`` expects all ``.rst`` files in a folder called ``content``, ``.css`` files in a folder called ``css`` and ``.scss`` files in a folder called ``scss``. You can run ``haya`` by calling::
 
   haya build
 
 This command will build the static site and place it in a directory called ``docs``.
+
+Installation
+============
+
+I have not come around to publishing this to PyPI, so you can install ``haya`` by running::
+
+ pip install git+https://github.com/bhargavkulk/haya.git#egg=haya
+
+An example on how to use ``haya`` with GitHub Actions can be seen `here <https://github.com/bhargavkulk/bhargavkulk.github.io/blob/main/.github/workflows/static.yml>`__.
 
 Features
 ========
