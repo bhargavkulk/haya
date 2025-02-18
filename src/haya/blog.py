@@ -9,7 +9,7 @@ type Index = list[Item]
 
 
 def parse_post_filename(filename: str) -> datetime:
-    date, name = filename.split(".")[0].split("_")
+    date = filename.split(".")[0].split("_")[0]
     return datetime.strptime(date, "%Y-%m-%d")
 
 def make_index(
