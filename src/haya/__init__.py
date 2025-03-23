@@ -1,30 +1,37 @@
-from typing import *
-import click
-import tomllib
-from pathlib import Path
 import shutil
-import sass
-from haya.blog import make_index
+from pathlib import Path
+from typing import *
 
+import click
+import sass
+import tomllib
+
+from haya.blog import make_index
 from haya.writer import PageWriter
 
-INPUT_DIR = Path('./content/')
-OUTPUT_DIR = Path('./docs/')
-TEMPLATE_DIR = Path('./templates/')
-SCSS_DIR = Path('./scss/')
-CSS_DIR = Path('./css/')
+INPUT_DIR = Path("./content/")
+OUTPUT_DIR = Path("./docs/")
+TEMPLATE_DIR = Path("./templates/")
+SCSS_DIR = Path("./scss/")
+ASSETS_DIR = Path("./assets/")
+CSS_DIR = Path("./css/")
+
 
 @click.group()
 def main():
     pass
 
+
 @click.command()
 def build():
     if CSS_DIR.exists():
-        shutil.copytree(CSS_DIR, OUTPUT_DIR / 'css')
+        shutil.copytree(CSS_DIR, OUTPUT_DIR / "css")
+
+    if ASSETS_DIR.exists():
+        shutil.copytree(ASSETS_DIR, OUTPUT_DIR / "assets")
 
     if SCSS_DIR.exists():
-        sass.compile(dirname=(str(SCSS_DIR), (str(OUTPUT_DIR / 'css'))))
+        sass.compile(dirname=(str(SCSS_DIR), (str(OUTPUT_DIR / "css"))))
 
     indices = dict()
 
@@ -37,12 +44,10 @@ def build():
             index = make_index(tbi.name, INPUT_DIR, OUTPUT_DIR, TEMPLATE_DIR)
             indices[tbi.name] = index
 
-    for rst_file in INPUT_DIR.glob('*.rst'):
-        PageWriter(INPUT_DIR,
-                   OUTPUT_DIR,
-                   TEMPLATE_DIR,
-                   rst_file.stem,
-                   indices).write_page()
+    for rst_file in INPUT_DIR.glob("*.rst"):
+        PageWriter(
+            INPUT_DIR, OUTPUT_DIR, TEMPLATE_DIR, rst_file.stem, indices
+        ).write_page()
 
 
 main.add_command(build)
